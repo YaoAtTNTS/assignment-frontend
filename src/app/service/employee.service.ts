@@ -23,7 +23,7 @@ export class EmployeeService {
   }
 
   getEmployees(params) {
-    return this.http.get(this.baseUrl + 'list',{
+    return this.http.get(this.baseUrl,{
       params: params
     })  }
 
