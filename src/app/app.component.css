@@ -1,0 +1,94 @@
+body{
+  font-size: 20px;
+  font-family: "Times New Roman", serif;
+  color: #00007F;
+}
+
+h1{
+  font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight: 100;
+  font-size: 20px;
+  text-align: center;
+}
+
+h2{
+  font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight: 100;
+  font-size: 15px;
+  text-align: center;
+}
+
+.containner{
+  height: 690px;
+  width: 1400px;
+  background-color: #c8c8c8;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.head{
+  height: 100px;
+  width: 1400px;
+  background-color: #aaff00;
+  margin-bottom: 10px;
+}
+.content{
+  height: 690px;
+  width: 1400px;
+}
+.content .content-left{
+  float: left;
+  height: 780px;
+  width: 300px;
+  background-color: #00aaff;
+}
+
+.content .content-left .content-left-ul{
+  margin-top: 50px;
+  display: table;
+}
+
+.content .content-right{
+  float: right;
+  height: 780px;
+  width: 1090px;
+  background-color: #ffffff;
+}
+
+.image1{
+  margin-top: 50px;
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+  opacity: 100;
+}
+
+.image2{
+  margin-left: 50px;
+  margin-right: 15px;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+/**
+  Mobile phone horizontal vertical hide left side
+ */
+@media  all and (max-width:320px), all and (max-width:480px){
+  .content-left{
+    display: none;
+  }
+}
+
+/**
+  Tablet changes
+*/
+@media  all and (max-width:768px), all and (max-width:1024px){
+  .head{
+    background-color: #007400;
+  }
+
+  .foot{
+    background-color: #9f6a00;
+  }
+}

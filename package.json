@@ -18,6 +18,11 @@
     "@angular/platform-browser": "^14.2.0",
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
+    "@ng-bootstrap/ng-bootstrap": "^13.0.0",
+    "@types/underscore": "^1.11.4",
+    "ag-grid-angular": "^28.2.0",
+    "ag-grid-community": "^28.2.0",
+    "ng2-file-upload": "^1.4.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
