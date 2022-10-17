@@ -5,6 +5,7 @@ import { GridOptions, IGetRowsParams } from "ag-grid-community";
 import { Subscription } from "rxjs";
 import { EmployeeService } from "./service/employee.service";
 import {Employee} from "./model/employee";
+import {FileUploader} from "ng2-file-upload";
 
 
 function actionCellRenderer(params) {
@@ -35,7 +36,7 @@ function actionCellRenderer(params) {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css', './popup/popup.component.css']
 })
 export class AppComponent implements  OnInit {
   title = 'assignment';
@@ -59,6 +60,22 @@ export class AppComponent implements  OnInit {
 
   minSalary: string;
   maxSalary: string;
+
+  uploader:FileUploader = new FileUploader({
+    url: "http://localhost:8090/users/upload",
+    method: "POST",
+    itemAlias: "file",
+    headers: [
+      {
+        name: 'contentType',
+        value: 'text/csv'
+      },
+      {
+        name: 'withCredentials',
+        value: 'false'
+      }
+    ]
+  });
 
   constructor(
     private employee: EmployeeService
@@ -140,13 +157,19 @@ export class AppComponent implements  OnInit {
     console.log("Confirmed deletion. " + this.pendingActionEmployee.id);
     this.rowData.splice(this.pendingActionIndex, 1);
     this.gridApi.setRowData(this.rowData);
-    this.employee.deleteEmployee(this.pendingActionEmployee.id).subscribe();
+    this.employee.deleteEmployee(this.pendingActionEmployee.id).subscribe(
+      res => console.log(res),
+      err => this.showError(err)
+    );
   }
 
   onEditSave() {
     this.rowData[this.pendingActionIndex] = this.pendingActionEmployee;
     this.gridApi.setRowData(this.rowData);
-    this.employee.updateEmployee(JSON.stringify(this.pendingActionEmployee)).subscribe();
+    this.employee.updateEmployee(JSON.stringify(this.pendingActionEmployee)).subscribe(
+      res => console.log(res),
+      err => this.showError(err)
+    );
   }
 
   showError (error) {
@@ -157,6 +180,28 @@ export class AppComponent implements  OnInit {
   showSuccess (msg) {
     document.getElementById('success_message').innerText = msg;
     document.getElementById('id04').style.display='block';
+  }
+
+  selectedFileOnChanged(params) {
+    document.getElementById("upload_submit").hidden = false;
+  }
+
+  onUploadSubmit () {
+    console.log("Uploading file..." + this.uploader.queue[0]._file.type);
+    if (this.uploader.queue[0]._file.type != 'text/csv') {
+      this.showError('Invalid file type');
+      return;
+    }
+    this.uploader.queue[0].onSuccess = (response, status, headers) => {
+      let tempRes = JSON.parse(response);
+      if (status == 200) {
+        this.showSuccess(tempRes['result']);
+      }else {
+        // TODO
+        this.showError(tempRes['result']);
+      }
+    };
+    this.uploader.queue[0].upload(); // start uploading
   }
 
 }

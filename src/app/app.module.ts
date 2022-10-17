@@ -9,6 +9,7 @@ import {DeletePopupComponent} from "./popup/delete.popup.component";
 import {SuccessPopupComponent} from "./popup/success.popup.component";
 import {ErrorPopupComponent} from "./popup/error.popup.component";
 import {FormsModule} from "@angular/forms";
+import {FileUploadModule} from "ng2-file-upload";
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {FormsModule} from "@angular/forms";
     BrowserModule,
     HttpClientModule,
     AgGridModule,
-    FormsModule
+    FormsModule,
+    FileUploadModule
   ],
   providers: [
 

@@ -40,7 +40,8 @@
         &nbsp;&nbsp;&nbsp;&nbsp;
         <button id="search_submit" (click)="searchEmployees()" >Search</button>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
+        <input type="file" accept=".csv" ng2FileSelect [uploader]="uploader" (change)="selectedFileOnChanged($event)" />
+        <button id="upload_submit" (click)="onUploadSubmit()" hidden>Upload</button>
       </p>
       <ag-grid-angular
         #myGrid
