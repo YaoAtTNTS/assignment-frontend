@@ -11,6 +11,7 @@
 
 <body>
 
+<app-popup-add></app-popup-add>
 <app-popup-edit></app-popup-edit>
 <app-popup-delete></app-popup-delete>
 <app-popup-error></app-popup-error>
@@ -30,6 +31,8 @@
     </div>
     <div class="content-right">
       <p>
+        <button id="add_new" (click)="onAddClick()" > Add New </button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
         MinSalary: $
         <input type="text" class="top-input" name="min-salary" width="20" required
                pattern="^[0-9]+(\.[0-9])?$" placeholder="Amount" [(ngModel)]="minSalary">

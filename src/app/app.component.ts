@@ -148,7 +148,7 @@ export class AppComponent implements  OnInit {
         console.log("Deleting " + params.rowIndex);
         this.pendingActionEmployee = params.node.data;
         this.pendingActionIndex = params.rowIndex;
-        document.getElementById('id02').style.display='block'
+        document.getElementById('id02').style.display='block';
       }
     }
   }
@@ -167,6 +167,20 @@ export class AppComponent implements  OnInit {
     this.rowData[this.pendingActionIndex] = this.pendingActionEmployee;
     this.gridApi.setRowData(this.rowData);
     this.employee.updateEmployee(JSON.stringify(this.pendingActionEmployee)).subscribe(
+      res => console.log(res),
+      err => this.showError(err)
+    );
+  }
+
+  onAddClick() {
+    this.pendingActionEmployee = {id: "", login: "", name: "", salary: 0};
+    document.getElementById('id00').style.display='block';
+  }
+
+  onAddSave() {
+    this.rowData[this.rowData.length] = this.pendingActionEmployee;
+    this.gridApi.setRowData(this.rowData);
+    this.employee.addEmployee(JSON.stringify(this.pendingActionEmployee)).subscribe(
       res => console.log(res),
       err => this.showError(err)
     );
