@@ -1,0 +1,26 @@
+<div id="id01" class="w3-modal">
+  <div class="w3-modal-content w3-animate-top w3-card-4">
+    <header class="w3-container w3-blue w3-display-container">
+      <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-display-topright w3-hover-red w3-hover-opacity">&times;</span>
+      <h2>Edit</h2>
+    </header>
+    <div class="w3-container">
+      <form (ngSubmit)="onEditSave()">
+        <br><br>
+        Employee Id:
+        <input type="text" name="employee-id" required [(ngModel)]="this.app.pendingActionEmployee.id" style="border-style: hidden"><br><br>
+        Name:<br>
+        <input type="text" name="employee-name" required [(ngModel)]="this.app.pendingActionEmployee.name"><br><br>
+        Login:<br>
+        <input type="text" name="employee-login" required [(ngModel)]="this.app.pendingActionEmployee.login"><br><br>
+        Salary:<br>
+        <input type="number" name="employee-salary" required [(ngModel)]="this.app.pendingActionEmployee.salary" min="0">
+        <br><br>
+        <button type="submit">Save</button>
+      </form>
+    </div>
+    <footer class="w3-container w3-white">
+      <br><br><br>
+    </footer>
+  </div>
+</div>

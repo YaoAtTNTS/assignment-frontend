@@ -2,6 +2,7 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import * as _ from 'underscore';
+import {Employee} from "../model/employee";
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,11 @@ import * as _ from 'underscore';
 export class EmployeeService {
 
   private readonly baseUrl: string;
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  };
 
   constructor(
     private http: HttpClient
@@ -17,40 +23,29 @@ export class EmployeeService {
   }
 
   getEmployees(params) {
-    console.log("Before post on employee service.");
-    return this.http.get(this.baseUrl + 'list', params)
+    return this.http.get(this.baseUrl + 'list',{
+      params: params
+    })  }
+
+  getEmployee(id): Employee {
+    let employee: Employee;
+    this.http.get(this.baseUrl + id).subscribe(data => {
+      console.log(data['result']);
+      employee = data['result'];
+    });
+    return employee;
   }
 
-  public sortUsers (users, params) : any {
-    console.log('Users: ' + users);
-    var sortedUsers = users;
-    var sortModel = null;
-    var sortColId = '';
-    var sort = ''; //asc or desc
-    var filterModel;
+  addEmployee(e: string) {
+    return this.http.post(this.baseUrl, e, this.httpOptions);
+  }
 
-    sortModel = params.sortModel;
-    filterModel = params.filteModel;
+  updateEmployee(e: string) {
+    return this.http.patch(this.baseUrl, e, this.httpOptions);
+  }
 
-    if(sortModel.length) {
-      // implement fake sorting
-      sortModel.forEach(element => {
-        sortColId = element.colId;
-        sort = element.sort;
-      });
-
-      if(sort == 'asc') {
-        sortedUsers = _.sortBy(users, sortColId);
-      } else {
-        sortedUsers = _.sortBy(users, sortColId).reverse();
-      }
-    }
-
-    console.log('Sorted users data: ' + sortedUsers);
-    return {
-      users: sortedUsers.slice(params.startRow, params.endRow),
-      totalRecords: users.length
-    };
+  deleteEmployee(id) {
+    return this.http.delete(this.baseUrl + id, this.httpOptions);
   }
 
 }

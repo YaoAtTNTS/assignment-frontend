@@ -4,6 +4,7 @@ import { AgGridAngular } from "ag-grid-angular";
 import { GridOptions, IGetRowsParams } from "ag-grid-community";
 import { Subscription } from "rxjs";
 import { EmployeeService } from "./service/employee.service";
+import {Employee} from "./model/employee";
 
 
 function actionCellRenderer(params) {
@@ -22,9 +23,9 @@ function actionCellRenderer(params) {
 `;
   } else {
     eGui.innerHTML = `
-<img class="action-button edit"  data-action="edit" alt="Edit" width="16px" height="16px" src="../assets/edit.png">   </img>
+<img class="action-button edit"  data-action="edit" alt="Edit" width="16px" height="16px" src="../assets/edit.png">
 &nbsp;&nbsp;
-<img class="action-button delete" data-action="delete" alt="Delete" width="16px" height="16px" src="../assets/delete.png"">  </img>
+<img class="action-button delete" data-action="delete" alt="Delete" width="16px" height="16px" src="../assets/delete.png"">
 `;
   }
 
@@ -53,6 +54,11 @@ export class AppComponent implements  OnInit {
   rowData: any;
 
   functions: string[];
+  pendingActionIndex: number;
+  pendingActionEmployee: Employee;
+
+  minSalary: string;
+  maxSalary: string;
 
   constructor(
     private employee: EmployeeService
@@ -81,10 +87,13 @@ export class AppComponent implements  OnInit {
       rowHeight: 30,
       cacheBlockSize: 20,
       paginationPageSize: 20,
-      rowModelType: 'infinite',
+      rowModelType: 'clientSide',
     }
 
     this.functions = ['Function 1', 'Function 2','Function 3','Function 4','Function 5'];
+    this.pendingActionEmployee = {id: "", login: "", name: "", salary: 0};
+    this.minSalary = '0';
+    this.maxSalary = '10000';
   }
 
   onGridReady(params) {
@@ -92,22 +101,15 @@ export class AppComponent implements  OnInit {
 
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
+    this.searchEmployees()
+  }
 
-    var datasource = {
-      getRows: (params: IGetRowsParams) => {
-        //  TODO: Call a service that fetches list of users
-        console.log("Fetching startRow " + params.startRow + " of " + params.endRow);
-        console.log(params);
-        this.employee.getEmployees(params)
-          .subscribe(data => {
-            console.log(data);
-            let sortUsers = this.employee.sortUsers(data, params);
-            params.successCallback(sortUsers['users'], sortUsers['totalRecords'])
-          });
-      }
-    }
-
-    this.gridApi.setDatasource(datasource);
+  searchEmployees() {
+    this.employee.getEmployees({'minSalary':this.minSalary, 'maxSalary':this.maxSalary, 'offset':0, 'limit':20, 'sort': '+id'})
+      .subscribe(data => {
+        console.log(data);
+        this.rowData = data['results'];
+      });
   }
 
   onPaginationChanged() { }
@@ -120,14 +122,41 @@ export class AppComponent implements  OnInit {
 
       if (action === "edit") {
         console.log("Editing " + params.rowIndex);
+        this.pendingActionEmployee = params.node.data;
+        this.pendingActionIndex = params.rowIndex;
         document.getElementById('id01').style.display='block';
       }
 
       if (action === "delete") {
         console.log("Deleting " + params.rowIndex);
+        this.pendingActionEmployee = params.node.data;
+        this.pendingActionIndex = params.rowIndex;
         document.getElementById('id02').style.display='block'
       }
     }
+  }
+
+  confirmDelete() {
+    console.log("Confirmed deletion. " + this.pendingActionEmployee.id);
+    this.rowData.splice(this.pendingActionIndex, 1);
+    this.gridApi.setRowData(this.rowData);
+    this.employee.deleteEmployee(this.pendingActionEmployee.id).subscribe();
+  }
+
+  onEditSave() {
+    this.rowData[this.pendingActionIndex] = this.pendingActionEmployee;
+    this.gridApi.setRowData(this.rowData);
+    this.employee.updateEmployee(JSON.stringify(this.pendingActionEmployee)).subscribe();
+  }
+
+  showError (error) {
+    document.getElementById('error_message').innerText = error;
+    document.getElementById('id03').style.display='block';
+  }
+
+  showSuccess (msg) {
+    document.getElementById('success_message').innerText = msg;
+    document.getElementById('id04').style.display='block';
   }
 
 }
