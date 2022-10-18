@@ -1,27 +1,25 @@
-# Assignment
+# Project Setup Guide for Windows
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.6.
+## Prerequisites
 
-## Development server
+1. Node.js
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Refer to the [Node.js installation guide](https://www.guru99.com/download-install-node-js.html) for Windows.
 
-## Code scaffolding
+2. Angular CLI
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Open cmd, 'npm install -g @angular/cli'
 
-## Build
+## Run the Application Locally
+1. Open cmd, navigate to the directory where you want to download the source code.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+2. Run 'git clone https://github.com/YaoAtTNTS/assignment-frontend.git'
 
-## Running unit tests
+3. Run 'cd ./assignment-frontend' to navigate to the project root dir
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+4. Run 'npm install'
 
-## Running end-to-end tests
+5. Run 'ng serve'
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+6. Open your browser on http://localhost:4200/
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
