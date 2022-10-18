@@ -17,10 +17,10 @@
 <app-popup-error></app-popup-error>
 <app-popup-success></app-popup-success>
 
-<div class="containner">
+<div class="container">
 
   <div class="content">
-    <div class="content-left">
+    <div class="content-left" id="left_nav">
       <img class="image1" alt="Loading" src="../assets/profile.jpg">
       <h1>James Brown</h1>
       <ul class="content-left-ul" style="list-style: none">
@@ -31,24 +31,25 @@
     </div>
     <div class="content-right">
       <p>
-        <button id="add_new" (click)="onAddClick()" > Add New </button>
+<!--        <img id="more_top_left" class="image3" alt="Loading" (click)="onClickMore()"  src="../assets/more.png">-->
+        <button id="add_new" (click)="onAddClicked()" > ➕ </button>
         &nbsp;&nbsp;&nbsp;&nbsp;
-        MinSalary: $
+        MinSal: $
         <input type="text" class="top-input" name="min-salary" width="20" required
                pattern="^[0-9]+(\.[0-9])?$" placeholder="Amount" [(ngModel)]="minSalary">
-        &nbsp;&nbsp;-&nbsp;&nbsp;
-        MaxSalary: $
+        &nbsp;-&nbsp;
+        MaxSal: $
         <input type="text" class="top-input" name="max-salary" width="20" required
                pattern="^[0-9]+(\.[0-9])?$" placeholder="Amount" [(ngModel)]="maxSalary">
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <button id="search_submit" (click)="searchEmployees()" >Search</button>
+        &nbsp;&nbsp;
+        <button id="search_submit" (click)="searchEmployees()" >🔍</button>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="file" accept=".csv" ng2FileSelect [uploader]="uploader" (change)="selectedFileOnChanged($event)" />
-        <button id="upload_submit" (click)="onUploadSubmit()" hidden>Upload</button>
+        <input  type="file" accept=".csv" ng2FileSelect [uploader]="uploader" (change)="selectedFileOnChanged($event)" />
+        <button id="upload_submit" (click)="onUploadSubmitted()" style="color: #0d8bf2; font-weight: bold" hidden>&nbsp;⬆&nbsp;</button>
       </p>
       <ag-grid-angular
         #myGrid
-        style="height: 690px;"
+        style="height: 690px; width: 900px"
         class="ag-theme-balham"
         [rowData]="rowData"
         [columnDefs]="columnDefs"

@@ -16,7 +16,7 @@ export class DeletePopupComponent {
 
   onDeleteYes () {
     document.getElementById('id02').style.display='none'
-    this.app.confirmDelete();
+    this.app.onDeleteConfirmed();
   }
 
   onDeleteNo () {

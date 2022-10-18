@@ -61,8 +61,11 @@ export class AppComponent implements  OnInit {
   minSalary: string;
   maxSalary: string;
 
+  errorMsg: string;
+  successMsg: string;
+
   uploader:FileUploader = new FileUploader({
-    url: "http://localhost:8090/users/upload",
+    url: "http://localhost:8080/users/upload",
     method: "POST",
     itemAlias: "file",
     headers: [
@@ -83,12 +86,12 @@ export class AppComponent implements  OnInit {
 
     this.columnDefs = [
       { headerName: 'Id', width: 150, field: 'id', sortable: true, resizable:true, headerClass: 'ag-center-aligned-header' },
-      { headerName: 'Name', field: 'name', sortable: true, filter: 'agTextColumnFilter' },
-      { headerName: 'Login', field: 'login', sortable: true, filter: 'agTextColumnFilter' },
-      { headerName: 'Salary', field: 'salary', sortable: true, filter: 'agNumColumnFilter' },
+      { headerName: 'Name', width: 150, field: 'name', sortable: true, resizable: true, filter: 'agTextColumnFilter' },
+      { headerName: 'Login', width: 150, field: 'login', sortable: true, resizable: true, filter: 'agTextColumnFilter' },
+      { headerName: 'Salary', width: 150, field: 'salary', sortable: true, resizable:true,  filter: 'agNumColumnFilter' },
       {
         headerName: "Action",
-        minWidth: 150,
+        width: 150,
         cellRenderer: actionCellRenderer,
         editable: false,
         colId: "action"
@@ -111,20 +114,23 @@ export class AppComponent implements  OnInit {
     this.pendingActionEmployee = {id: "", login: "", name: "", salary: 0};
     this.minSalary = '0';
     this.maxSalary = '10000';
+
+    this.errorMsg = '';
+    this.successMsg = '';
   }
 
   onGridReady(params) {
-    console.log('On Grid Ready');
-
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.searchEmployees()
   }
 
   searchEmployees() {
+    if (this.minSalary > this.maxSalary) {
+      this.showError('Max salary must not be less than min salary.');
+    }
     this.employee.getEmployees({'minSalary':this.minSalary, 'maxSalary':this.maxSalary, 'offset':0, 'limit':20, 'sort': '+id'})
       .subscribe(data => {
-        console.log(data);
         this.rowData = data['results'];
       });
   }
@@ -138,14 +144,12 @@ export class AppComponent implements  OnInit {
       let action = params.event.target.dataset.action;
 
       if (action === "edit") {
-        console.log("Editing " + params.rowIndex);
         this.pendingActionEmployee = params.node.data;
         this.pendingActionIndex = params.rowIndex;
         document.getElementById('id01').style.display='block';
       }
 
       if (action === "delete") {
-        console.log("Deleting " + params.rowIndex);
         this.pendingActionEmployee = params.node.data;
         this.pendingActionIndex = params.rowIndex;
         document.getElementById('id02').style.display='block';
@@ -153,8 +157,7 @@ export class AppComponent implements  OnInit {
     }
   }
 
-  confirmDelete() {
-    console.log("Confirmed deletion. " + this.pendingActionEmployee.id);
+  onDeleteConfirmed() {
     this.rowData.splice(this.pendingActionIndex, 1);
     this.gridApi.setRowData(this.rowData);
     this.employee.deleteEmployee(this.pendingActionEmployee.id).subscribe(
@@ -163,7 +166,7 @@ export class AppComponent implements  OnInit {
     );
   }
 
-  onEditSave() {
+  onEditSaved() {
     this.rowData[this.pendingActionIndex] = this.pendingActionEmployee;
     this.gridApi.setRowData(this.rowData);
     this.employee.updateEmployee(JSON.stringify(this.pendingActionEmployee)).subscribe(
@@ -172,12 +175,12 @@ export class AppComponent implements  OnInit {
     );
   }
 
-  onAddClick() {
+  onAddClicked() {
     this.pendingActionEmployee = {id: "", login: "", name: "", salary: 0};
     document.getElementById('id00').style.display='block';
   }
 
-  onAddSave() {
+  onAddSaved() {
     this.rowData[this.rowData.length] = this.pendingActionEmployee;
     this.gridApi.setRowData(this.rowData);
     this.employee.addEmployee(JSON.stringify(this.pendingActionEmployee)).subscribe(
@@ -187,12 +190,12 @@ export class AppComponent implements  OnInit {
   }
 
   showError (error) {
-    document.getElementById('error_message').innerText = error;
+    this.errorMsg = error;
     document.getElementById('id03').style.display='block';
   }
 
   showSuccess (msg) {
-    document.getElementById('success_message').innerText = msg;
+    this.successMsg = msg;
     document.getElementById('id04').style.display='block';
   }
 
@@ -200,22 +203,25 @@ export class AppComponent implements  OnInit {
     document.getElementById("upload_submit").hidden = false;
   }
 
-  onUploadSubmit () {
-    console.log("Uploading file..." + this.uploader.queue[0]._file.type);
+  onUploadSubmitted () {
     if (this.uploader.queue[0]._file.type != 'text/csv') {
       this.showError('Invalid file type');
-      return;
-    }
-    this.uploader.queue[0].onSuccess = (response, status, headers) => {
-      let tempRes = JSON.parse(response);
-      if (status == 200) {
-        this.showSuccess(tempRes['result']);
-      }else {
-        // TODO
+    } else {
+      this.uploader.queue[0].onSuccess = (response, status, headers) => {
+        let tempRes = JSON.parse(response);
+        if (status == 200) {
+          this.showSuccess(tempRes['result']);
+          this.searchEmployees();
+          document.getElementById("upload_submit").hidden = true;
+        }
+      };
+      this.uploader.queue[0].onError = (response, status, headers) => {
+        let tempRes = JSON.parse(response);
         this.showError(tempRes['result']);
-      }
-    };
-    this.uploader.queue[0].upload(); // start uploading
+        document.getElementById("upload_submit").hidden = true;
+      };
+      this.uploader.queue[0].upload(); // start uploading
+    }
   }
 
 }

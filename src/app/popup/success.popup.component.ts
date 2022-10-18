@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import {AppComponent} from "../app.component";
 
 @Component({
   selector: 'app-popup-success',
@@ -8,5 +9,8 @@ import { Component } from "@angular/core";
 
 export class SuccessPopupComponent {
 
-
+  constructor(
+    public app: AppComponent
+  ) {
+  }
 }

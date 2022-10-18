@@ -19,7 +19,7 @@ export class EmployeeService {
   constructor(
     private http: HttpClient
   ) {
-    this.baseUrl = 'http://localhost:8090/employee/';
+    this.baseUrl = 'http://localhost:8080/users/';
   }
 
   getEmployees(params) {
@@ -30,7 +30,6 @@ export class EmployeeService {
   getEmployee(id): Employee {
     let employee: Employee;
     this.http.get(this.baseUrl + id).subscribe(data => {
-      console.log(data['result']);
       employee = data['result'];
     });
     return employee;

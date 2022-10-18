@@ -16,7 +16,7 @@ export class AddPopupComponent {
 
   onAddSave () {
     document.getElementById('id00').style.display='none'
-    this.app.onAddSave();
+    this.app.onAddSaved();
   }
 
 }

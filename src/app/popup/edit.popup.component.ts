@@ -16,7 +16,7 @@ export class EditPopupComponent {
 
   onEditSave () {
     document.getElementById('id01').style.display='none'
-    this.app.onEditSave();
+    this.app.onEditSaved();
   }
 
 }

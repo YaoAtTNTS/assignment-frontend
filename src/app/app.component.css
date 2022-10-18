@@ -19,23 +19,24 @@ h2{
   text-align: center;
 }
 
-.containner{
-  height: 690px;
-  width: 1400px;
+.container{
+  height: 780px;
+  width: 1200px;
   background-color: #c8c8c8;
   margin: 0 auto;
   text-align: center;
+  overflow: auto;
 }
 
 .head{
   height: 100px;
-  width: 1400px;
+  width: 1200px;
   background-color: #aaff00;
   margin-bottom: 10px;
 }
 .content{
-  height: 690px;
-  width: 1400px;
+  height: 780px;
+  width: 1200px;
 }
 .content .content-left{
   float: left;
@@ -52,7 +53,7 @@ h2{
 .content .content-right{
   float: right;
   height: 780px;
-  width: 1090px;
+  width: 900px;
   background-color: #ffffff;
 }
 
@@ -72,8 +73,14 @@ h2{
   border-radius: 10px;
 }
 
+.image3{
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+}
+
 .top-input{
-  width: 100px;
+  width: 80px;
   align-content: end;
 }
 
@@ -84,17 +91,28 @@ h2{
   .content-left{
     display: none;
   }
+  .image3{
+    display: compact;
+  }
 }
 
 /**
   Tablet changes
 */
 @media  all and (max-width:768px), all and (max-width:1024px){
-  .head{
-    background-color: #007400;
+  .content-left{
+    display: none;
   }
-
-  .foot{
-    background-color: #9f6a00;
+  .head{
+    width: 900px;
+  }
+  .content{
+    width: 900px;
+  }
+  .container{
+    width: 900px;
+  }
+  .image3{
+    display: block;
   }
 }
