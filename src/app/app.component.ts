@@ -212,12 +212,14 @@ export class AppComponent implements  OnInit {
         if (status == 200) {
           this.showSuccess(tempRes['result']);
           this.searchEmployees();
+          this.uploader.clearQueue();
           document.getElementById("upload_submit").hidden = true;
         }
       };
       this.uploader.queue[0].onError = (response, status, headers) => {
         let tempRes = JSON.parse(response);
         this.showError(tempRes['result']);
+        this.uploader.clearQueue();
         document.getElementById("upload_submit").hidden = true;
       };
       this.uploader.queue[0].upload(); // start uploading
