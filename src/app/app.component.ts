@@ -126,7 +126,7 @@ export class AppComponent implements  OnInit {
   }
 
   searchEmployees() {
-    if (this.minSalary > this.maxSalary) {
+    if (Number(this.minSalary) > Number(this.maxSalary)) {
       this.showError('Max salary must not be less than min salary.');
     }
     this.employee.getEmployees({'minSalary':this.minSalary, 'maxSalary':this.maxSalary, 'offset':0, 'limit':20, 'sort': '+id'})
