@@ -206,6 +206,7 @@ export class AppComponent implements  OnInit {
   onUploadSubmitted () {
     if (this.uploader.queue[0]._file.type != 'text/csv') {
       this.showError('Invalid file type');
+      document.getElementById("upload_submit").hidden = true;
     } else {
       this.uploader.queue[0].onSuccess = (response, status, headers) => {
         let tempRes = JSON.parse(response);
